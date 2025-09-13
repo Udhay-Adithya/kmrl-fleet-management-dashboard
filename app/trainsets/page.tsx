@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { StatusBadge } from "@/components/status-badge"
 import { PriorityBadge } from "@/components/priority-badge"
+import { InfoTooltip } from "@/components/info-tooltip"
 import { mockTrainsets, type TrainsetStatus } from "@/lib/mock-data"
+import { getTooltip } from "@/lib/tooltips"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
@@ -147,19 +149,37 @@ export default function TrainsetsPage() {
               {/* Trainsets Table */}
               <Card className="mt-6">
                 <CardHeader>
-                  <CardTitle>Fleet Overview</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    Fleet Overview
+                    <InfoTooltip content={getTooltip("trainset")} />
+                  </CardTitle>
                   <CardDescription>Detailed information for each trainset in the fleet</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Trainset</TableHead>
+                        <TableHead className="flex items-center gap-2">
+                          Trainset
+                          <InfoTooltip content={getTooltip("trainset")} />
+                        </TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Availability</TableHead>
-                        <TableHead>Mileage</TableHead>
-                        <TableHead>Next Maintenance</TableHead>
+                        <TableHead className="flex items-center gap-2">
+                          Location
+                          <InfoTooltip content={getTooltip("stablingPosition")} />
+                        </TableHead>
+                        <TableHead className="flex items-center gap-2">
+                          Availability
+                          <InfoTooltip content={getTooltip("fleetAvailability")} />
+                        </TableHead>
+                        <TableHead className="flex items-center gap-2">
+                          Mileage
+                          <InfoTooltip content={getTooltip("mileageBalancing")} />
+                        </TableHead>
+                        <TableHead className="flex items-center gap-2">
+                          Next Maintenance
+                          <InfoTooltip content={getTooltip("preventiveMaintenance")} />
+                        </TableHead>
                         <TableHead>Issues</TableHead>
                         <TableHead>Actions</TableHead>
                       </TableRow>
@@ -289,7 +309,10 @@ export default function TrainsetsPage() {
 
                                     <div className="grid grid-cols-2 gap-4">
                                       <div>
-                                        <h4 className="font-semibold mb-2">Job Cards</h4>
+                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                          Job Cards
+                                          <InfoTooltip content={getTooltip("jobCards")} />
+                                        </h4>
                                         <div className="space-y-2 text-sm">
                                           <div className="flex justify-between">
                                             <span>Open:</span>
@@ -310,7 +333,10 @@ export default function TrainsetsPage() {
                                         </div>
                                       </div>
                                       <div>
-                                        <h4 className="font-semibold mb-2">Branding</h4>
+                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                          Branding
+                                          <InfoTooltip content={getTooltip("brandingPriority")} />
+                                        </h4>
                                         <div className="space-y-2 text-sm">
                                           <div className="flex justify-between">
                                             <span>Type:</span>
@@ -329,7 +355,10 @@ export default function TrainsetsPage() {
                                     </div>
 
                                     <div>
-                                      <h4 className="font-semibold mb-2">Cleaning Status</h4>
+                                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                        Cleaning Status
+                                        <InfoTooltip content={getTooltip("cleaningSchedule")} />
+                                      </h4>
                                       <div className="grid grid-cols-3 gap-4 text-sm">
                                         <div className="flex justify-between">
                                           <span>Last Cleaned:</span>

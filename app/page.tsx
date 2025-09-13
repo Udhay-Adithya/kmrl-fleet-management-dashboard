@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { StatusBadge } from "@/components/status-badge"
+import { InfoTooltip } from "@/components/info-tooltip"
 import { mockTrainsets, mockKPIData, mockInductionDecisions, getTrainsetsByStatus } from "@/lib/mock-data"
+import { getTooltip } from "@/lib/tooltips"
 import { Train, Wrench, Clock, AlertTriangle, TrendingUp, Users, DollarSign, Activity, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
@@ -53,7 +55,10 @@ export default function DashboardPage() {
               <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Fleet</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Total Fleet
+                      <InfoTooltip content={getTooltip("trainset")} />
+                    </CardTitle>
                     <Train className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -65,7 +70,10 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Fleet Availability</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Fleet Availability
+                      <InfoTooltip content={getTooltip("fleetAvailability")} />
+                    </CardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -80,7 +88,10 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">On-Time Performance</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      On-Time Performance
+                      <InfoTooltip content={getTooltip("onTimePerformance")} />
+                    </CardTitle>
                     <Clock className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -113,6 +124,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-lg flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-green-500"></div>
                       Active Service
+                      <InfoTooltip content={getTooltip("activeService")} />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -136,6 +148,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-lg flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
                       Maintenance
+                      <InfoTooltip content={getTooltip("maintenanceMode")} />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -158,6 +171,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-lg flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-blue-500"></div>
                       Standby
+                      <InfoTooltip content={getTooltip("standbyMode")} />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -180,6 +194,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-lg flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-red-500"></div>
                       Out of Service
+                      <InfoTooltip content={getTooltip("outOfService")} />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -231,8 +246,14 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Today's Induction Recommendations</CardTitle>
-                    <CardDescription>AI-generated decisions for optimal fleet utilization</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      Today's Induction Recommendations
+                      <InfoTooltip content={getTooltip("induction")} />
+                    </CardTitle>
+                    <CardDescription className="flex items-center gap-2">
+                      AI-generated decisions for optimal fleet utilization
+                      <InfoTooltip content={getTooltip("aiOptimization")} />
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -269,7 +290,10 @@ export default function DashboardPage() {
               <div className="mt-6 grid gap-4 md:grid-cols-3">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Maintenance Efficiency</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Maintenance Efficiency
+                      <InfoTooltip content={getTooltip("maintenanceEfficiency")} />
+                    </CardTitle>
                     <Wrench className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -280,7 +304,10 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Cost Savings</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Cost Savings
+                      <InfoTooltip content={getTooltip("costSavings")} />
+                    </CardTitle>
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -291,7 +318,10 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Passenger Satisfaction</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Passenger Satisfaction
+                      <InfoTooltip content={getTooltip("passengerSatisfaction")} />
+                    </CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>

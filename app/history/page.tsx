@@ -9,7 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { StatusBadge } from "@/components/status-badge"
+import { InfoTooltip } from "@/components/info-tooltip"
 import { mockHistory, getTrainsetById, type HistoryEntry } from "@/lib/mock-data"
+import { getTooltip } from "@/lib/tooltips"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
@@ -161,7 +163,10 @@ export default function HistoryPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">Decision History & Logs</h1>
+                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                    Decision History & Logs
+                    <InfoTooltip content="Historical record of all induction decisions made by the system and their real-world outcomes. This data is used for continuous improvement and machine learning model training." />
+                  </h1>
                   <p className="text-muted-foreground">
                     Track and analyze past induction decisions and their operational outcomes
                   </p>
@@ -192,7 +197,10 @@ export default function HistoryPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Success Rate
+                      <InfoTooltip content="Percentage of induction decisions that achieved their intended operational outcomes without major issues or failures." />
+                    </CardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -203,7 +211,10 @@ export default function HistoryPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Partial Outcomes</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Partial Outcomes
+                      <InfoTooltip content="Decisions that achieved some but not all intended outcomes. These may indicate areas for improvement in the decision-making process or external factors." />
+                    </CardTitle>
                     <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -216,7 +227,10 @@ export default function HistoryPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Failed Outcomes</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Failed Outcomes
+                      <InfoTooltip content="Decisions that did not achieve their intended outcomes due to unforeseen circumstances, equipment failures, or incorrect assessments. These are analyzed for system improvement." />
+                    </CardTitle>
                     <XCircle className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>

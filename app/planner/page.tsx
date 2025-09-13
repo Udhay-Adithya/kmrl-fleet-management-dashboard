@@ -8,7 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { StatusBadge } from "@/components/status-badge"
+import { InfoTooltip } from "@/components/info-tooltip"
 import { mockInductionDecisions, getTrainsetById } from "@/lib/mock-data"
+import { getTooltip } from "@/lib/tooltips"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
@@ -83,9 +85,13 @@ export default function PlannerPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">Induction Decision Planner</h1>
-                  <p className="text-muted-foreground">
+                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                    Induction Decision Planner
+                    <InfoTooltip content={getTooltip("induction")} />
+                  </h1>
+                  <p className="text-muted-foreground flex items-center gap-2">
                     AI-powered recommendations for optimal trainset allocation and scheduling
+                    <InfoTooltip content={getTooltip("aiOptimization")} />
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -113,7 +119,10 @@ export default function PlannerPage() {
               <div className="mt-6 grid gap-4 md:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Service Allocation</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Service Allocation
+                      <InfoTooltip content={getTooltip("activeService")} />
+                    </CardTitle>
                     <CheckCircle className="h-4 w-4 text-green-500" />
                   </CardHeader>
                   <CardContent>
@@ -126,7 +135,10 @@ export default function PlannerPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Maintenance Queue</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Maintenance Queue
+                      <InfoTooltip content={getTooltip("maintenanceMode")} />
+                    </CardTitle>
                     <Wrench className="h-4 w-4 text-yellow-500" />
                   </CardHeader>
                   <CardContent>
@@ -137,7 +149,10 @@ export default function PlannerPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Standby Reserve</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Standby Reserve
+                      <InfoTooltip content={getTooltip("standbyMode")} />
+                    </CardTitle>
                     <Clock className="h-4 w-4 text-blue-500" />
                   </CardHeader>
                   <CardContent>
@@ -148,7 +163,10 @@ export default function PlannerPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Conflicts Detected</CardTitle>
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      Conflicts Detected
+                      <InfoTooltip content={getTooltip("conflictDetection")} />
+                    </CardTitle>
                     <AlertTriangle className="h-4 w-4 text-red-500" />
                   </CardHeader>
                   <CardContent>
@@ -164,6 +182,7 @@ export default function PlannerPage() {
                   <CardTitle className="flex items-center gap-2">
                     <Calendar className="h-5 w-5" />
                     Plan Details
+                    <InfoTooltip content={getTooltip("planningHorizon")} />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -181,11 +200,17 @@ export default function PlannerPage() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium">Planning Horizon</div>
+                      <div className="text-sm font-medium flex items-center gap-2">
+                        Planning Horizon
+                        <InfoTooltip content={getTooltip("planningHorizon")} />
+                      </div>
                       <div className="text-sm text-muted-foreground">Next 24 hours</div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium">Optimization Score</div>
+                      <div className="text-sm font-medium flex items-center gap-2">
+                        Optimization Score
+                        <InfoTooltip content={getTooltip("optimizationScore")} />
+                      </div>
                       <div className="text-sm text-green-600 font-medium">94.2% efficiency</div>
                     </div>
                   </div>
@@ -221,10 +246,12 @@ export default function PlannerPage() {
                   <CardTitle className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5" />
                     Ranked Induction Recommendations
+                    <InfoTooltip content={getTooltip("induction")} />
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="flex items-center gap-2">
                     AI-generated decisions based on fitness certificates, job cards, branding priorities, mileage
                     balancing, cleaning schedules, and stabling geometry
+                    <InfoTooltip content={getTooltip("multiObjectiveOptimization")} />
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -253,8 +280,9 @@ export default function PlannerPage() {
                             </div>
                             <div className="flex items-center gap-4">
                               <div className="text-right">
-                                <div className={`text-sm font-medium ${getConfidenceColor(decision.confidence)}`}>
+                                <div className={`text-sm font-medium ${getConfidenceColor(decision.confidence)} flex items-center gap-1`}>
                                   {decision.confidence}% confidence
+                                  <InfoTooltip content={getTooltip("confidenceScore")} />
                                 </div>
                                 <Progress value={decision.confidence} className="w-20 mt-1" />
                               </div>

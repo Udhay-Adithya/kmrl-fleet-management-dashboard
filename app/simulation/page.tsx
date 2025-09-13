@@ -13,6 +13,8 @@ import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
+import { InfoTooltip } from "@/components/info-tooltip"
+import { getTooltip } from "@/lib/tooltips"
 import {
   Zap,
   Play,
@@ -124,7 +126,10 @@ export default function SimulationPage() {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">What-If Simulation</h1>
+                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                    What-If Simulation
+                    <InfoTooltip content={getTooltip("whatIfSimulation")} />
+                  </h1>
                   <p className="text-muted-foreground">
                     Test different scenarios and parameters to optimize fleet induction decisions
                   </p>
@@ -149,7 +154,10 @@ export default function SimulationPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-2">
-                      <Label>Maintenance Capacity (trainsets/day)</Label>
+                      <Label className="flex items-center gap-2">
+                        Maintenance Capacity (trainsets/day)
+                        <InfoTooltip content="Maximum number of trainsets that can be serviced simultaneously in maintenance facilities. Higher capacity allows more trainsets to be maintained but requires more resources and skilled technicians." />
+                      </Label>
                       <div className="px-3">
                         <Slider
                           value={[params.maintenanceCapacity]}
@@ -168,7 +176,10 @@ export default function SimulationPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Available Cleaning Slots</Label>
+                      <Label className="flex items-center gap-2">
+                        Available Cleaning Slots
+                        <InfoTooltip content={getTooltip("cleaningSchedule")} />
+                      </Label>
                       <div className="px-3">
                         <Slider
                           value={[params.cleaningSlots]}
@@ -187,7 +198,10 @@ export default function SimulationPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Emergency Reserve Requirement</Label>
+                      <Label className="flex items-center gap-2">
+                        Emergency Reserve Requirement
+                        <InfoTooltip content="Minimum number of trainsets that must be kept on standby for emergency deployment during unexpected disruptions, breakdowns, or peak demand situations." />
+                      </Label>
                       <div className="px-3">
                         <Slider
                           value={[params.emergencyReserve]}
@@ -228,7 +242,10 @@ export default function SimulationPage() {
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <Label htmlFor="branding-priority">Prioritize Branding Exposure</Label>
+                        <Label htmlFor="branding-priority" className="flex items-center gap-2">
+                          Prioritize Branding Exposure
+                          <InfoTooltip content={getTooltip("brandingPriority")} />
+                        </Label>
                         <Switch
                           id="branding-priority"
                           checked={params.brandingPriority}
@@ -326,7 +343,10 @@ export default function SimulationPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">Fleet Availability</span>
+                              <span className="text-sm font-medium flex items-center gap-1">
+                                Fleet Availability
+                                <InfoTooltip content={getTooltip("fleetAvailability")} />
+                              </span>
                               {getImpactIcon(simulationResults.availability - 75.2)}
                             </div>
                             <div className="text-2xl font-bold">{simulationResults.availability.toFixed(1)}%</div>
@@ -335,7 +355,10 @@ export default function SimulationPage() {
 
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">Operational Efficiency</span>
+                              <span className="text-sm font-medium flex items-center gap-1">
+                                Operational Efficiency
+                                <InfoTooltip content={getTooltip("maintenanceEfficiency")} />
+                              </span>
                               {getImpactIcon(simulationResults.efficiency - 87.3)}
                             </div>
                             <div className="text-2xl font-bold">{simulationResults.efficiency.toFixed(1)}%</div>
@@ -344,7 +367,10 @@ export default function SimulationPage() {
 
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">Cost Impact</span>
+                              <span className="text-sm font-medium flex items-center gap-1">
+                                Cost Impact
+                                <InfoTooltip content={getTooltip("costSavings")} />
+                              </span>
                               {getImpactIcon(simulationResults.costImpact, false)}
                             </div>
                             <div
@@ -358,7 +384,10 @@ export default function SimulationPage() {
 
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">Risk Score</span>
+                              <span className="text-sm font-medium flex items-center gap-1">
+                                Risk Score
+                                <InfoTooltip content="Operational risk assessment based on maintenance backlog, weather conditions, emergency reserves, and system reliability factors. Lower scores indicate safer operations." />
+                              </span>
                               {getImpactIcon(25 - simulationResults.riskScore)}
                             </div>
                             <div className="text-2xl font-bold">{simulationResults.riskScore}</div>
