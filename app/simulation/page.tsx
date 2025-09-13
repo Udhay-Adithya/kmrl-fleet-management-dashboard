@@ -121,28 +121,29 @@ export default function SimulationPage() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
+            <div className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-                    What-If Simulation
-                    <InfoTooltip content={getTooltip("whatIfSimulation")} />
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
+                    Fleet Performance Simulation
+                    <InfoTooltip content={getTooltip("multiObjectiveOptimization")} />
                   </h1>
-                  <p className="text-muted-foreground">
-                    Test different scenarios and parameters to optimize fleet induction decisions
+                  <p className="text-muted-foreground text-sm sm:text-base flex items-center gap-2">
+                    Model the performance of induction decisions and optimize fleet allocation
+                    <InfoTooltip content={getTooltip("onTimePerformance")} />
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-blue-600">
-                    <Zap className="mr-1 h-3 w-3" />
-                    Simulation Mode
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <Badge variant="outline" className="text-blue-600 w-fit">
+                    <BarChart3 className="mr-1 h-3 w-3" />
+                    Real-time Modeling
                   </Badge>
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div className="mt-6 grid gap-4 sm:gap-6 lg:grid-cols-2">
                 {/* Simulation Parameters */}
                 <Card>
                   <CardHeader>
@@ -482,7 +483,7 @@ export default function SimulationPage() {
                     <CardDescription>Compare current simulation with baseline operational parameters</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-4 md:grid-cols-4">
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
                       <div className="text-center">
                         <div className="text-sm font-medium text-muted-foreground">Availability</div>
                         <div className="text-lg font-bold">

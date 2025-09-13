@@ -35,24 +35,24 @@ export default function DashboardPage() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
+            <div className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">Fleet Operations Dashboard</h1>
-                  <p className="text-muted-foreground">Real-time fleet status and induction planning for Kochi Metro</p>
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Fleet Operations Dashboard</h1>
+                  <p className="text-muted-foreground text-sm sm:text-base">Real-time fleet status and induction planning for Kochi Metro</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-green-600">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <Badge variant="outline" className="text-green-600 w-fit">
                     <Activity className="mr-1 h-3 w-3" />
                     System Online
                   </Badge>
-                  <Badge variant="secondary">Last Updated: {new Date().toLocaleTimeString()}</Badge>
+                  <Badge variant="secondary" className="w-fit text-xs sm:text-sm">Last Updated: {new Date().toLocaleTimeString()}</Badge>
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function DashboardPage() {
                     <Train className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{totalTrainsets}</div>
+                    <div className="text-2xl font-bold">{totalTrainsets} </div>
                     <p className="text-xs text-muted-foreground">{availableTrainsets} available for service</p>
                     <Progress value={availabilityPercentage} className="mt-2" />
                   </CardContent>
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 </Card>
               </div>
 
-              <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
@@ -213,7 +213,7 @@ export default function DashboardPage() {
                 </Card>
               </div>
 
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div className="mt-6 grid gap-6 grid-cols-1 lg:grid-cols-2">
                 <Card>
                   <CardHeader>
                     <CardTitle>Quick Actions</CardTitle>
@@ -264,7 +264,7 @@ export default function DashboardPage() {
                         return (
                           <div
                             key={decision.trainsetId}
-                            className="flex items-center justify-between p-3 rounded-lg border"
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg border gap-2"
                           >
                             <div className="flex items-center gap-3">
                               <div className="font-medium">{trainset.number}</div>
@@ -287,7 +287,7 @@ export default function DashboardPage() {
                 </Card>
               </div>
 
-              <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium flex items-center gap-2">

@@ -92,25 +92,25 @@ export default function TrainsetsPage() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
+            <div className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">Trainset Fleet</h1>
-                  <p className="text-muted-foreground">
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Trainset Fleet</h1>
+                  <p className="text-muted-foreground text-sm sm:text-base">
                     Comprehensive view of all trainsets with status, maintenance, and operational details
                   </p>
                 </div>
-                <Badge variant="outline" className="text-sm">
+                <Badge variant="outline" className="text-sm w-fit">
                   {filteredTrainsets.length} of {mockTrainsets.length} trainsets
                 </Badge>
               </div>
 
               {/* Filters and Search */}
-              <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="flex flex-1 items-center gap-4">
-                  <div className="relative flex-1 max-w-sm">
+              <div className="mt-6 flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row flex-1 items-stretch sm:items-center gap-4">
+                  <div className="relative flex-1 max-w-full sm:max-w-sm">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       placeholder="Search trainsets..."
@@ -119,30 +119,32 @@ export default function TrainsetsPage() {
                       className="pl-9"
                     />
                   </div>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-[180px]">
-                      <Filter className="mr-2 h-4 w-4" />
-                      <SelectValue placeholder="Filter by status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
-                      <SelectItem value="standby">Standby</SelectItem>
-                      <SelectItem value="out-of-service">Out of Service</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="number">Trainset Number</SelectItem>
-                      <SelectItem value="availability">Availability</SelectItem>
-                      <SelectItem value="mileage">Mileage</SelectItem>
-                      <SelectItem value="nextMaintenance">Next Maintenance</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-full sm:w-[180px]">
+                        <Filter className="mr-2 h-4 w-4" />
+                        <SelectValue placeholder="Filter by status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="maintenance">Maintenance</SelectItem>
+                        <SelectItem value="standby">Standby</SelectItem>
+                        <SelectItem value="out-of-service">Out of Service</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select value={sortBy} onValueChange={setSortBy}>
+                      <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="number">Trainset Number</SelectItem>
+                        <SelectItem value="availability">Availability</SelectItem>
+                        <SelectItem value="mileage">Mileage</SelectItem>
+                        <SelectItem value="nextMaintenance">Next Maintenance</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
 
@@ -156,83 +158,63 @@ export default function TrainsetsPage() {
                   <CardDescription>Detailed information for each trainset in the fleet</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="flex items-center gap-2">
-                          Trainset
-                          <InfoTooltip content={getTooltip("trainset")} />
-                        </TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="flex items-center gap-2">
-                          Location
-                          <InfoTooltip content={getTooltip("stablingPosition")} />
-                        </TableHead>
-                        <TableHead className="flex items-center gap-2">
-                          Availability
-                          <InfoTooltip content={getTooltip("fleetAvailability")} />
-                        </TableHead>
-                        <TableHead className="flex items-center gap-2">
-                          Mileage
-                          <InfoTooltip content={getTooltip("mileageBalancing")} />
-                        </TableHead>
-                        <TableHead className="flex items-center gap-2">
-                          Next Maintenance
-                          <InfoTooltip content={getTooltip("preventiveMaintenance")} />
-                        </TableHead>
-                        <TableHead>Issues</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredTrainsets.map((trainset) => {
-                        const maintenanceDays = getDaysUntil(trainset.nextMaintenance)
-                        const fitnessExpiry = getDaysUntil(trainset.fitnessExpiry)
+                  {/* Mobile Card View */}
+                  <div className="block md:hidden space-y-4">
+                    {filteredTrainsets.map((trainset) => {
+                      const maintenanceDays = getDaysUntil(trainset.nextMaintenance)
+                      const fitnessExpiry = getDaysUntil(trainset.fitnessExpiry)
 
-                        return (
-                          <TableRow key={trainset.id}>
-                            <TableCell>
-                              <div className="flex items-center gap-3">
-                                {getStatusIcon(trainset.status)}
-                                <div>
-                                  <div className="font-medium">{trainset.number}</div>
-                                  <div className="text-sm text-muted-foreground">{trainset.name}</div>
-                                </div>
+                      return (
+                        <Card key={trainset.id} className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              {getStatusIcon(trainset.status)}
+                              <div>
+                                <div className="font-medium">{trainset.number}</div>
+                                <div className="text-sm text-muted-foreground">{trainset.name}</div>
                               </div>
-                            </TableCell>
-                            <TableCell>
-                              <StatusBadge status={trainset.status} />
-                            </TableCell>
-                            <TableCell>
+                            </div>
+                            <StatusBadge status={trainset.status} />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                            <div>
+                              <div className="text-muted-foreground">Location</div>
                               <div className="flex items-center gap-1">
                                 <MapPin className="h-3 w-3 text-muted-foreground" />
-                                <span className="text-sm">{trainset.location}</span>
+                                {trainset.location}
                               </div>
-                            </TableCell>
-                            <TableCell>
+                            </div>
+                            <div>
+                              <div className="text-muted-foreground">Availability</div>
                               <div className="flex items-center gap-2">
-                                <Progress value={trainset.availability} className="w-16" />
-                                <span className="text-sm font-medium">{trainset.availability}%</span>
+                                <Progress value={trainset.availability} className="w-12 h-2" />
+                                <span className="font-medium">{trainset.availability}%</span>
                               </div>
-                            </TableCell>
-                            <TableCell>
+                            </div>
+                            <div>
+                              <div className="text-muted-foreground">Mileage</div>
                               <div className="flex items-center gap-1">
                                 <Gauge className="h-3 w-3 text-muted-foreground" />
-                                <span className="text-sm">{trainset.mileage.toLocaleString()} km</span>
+                                {trainset.mileage.toLocaleString()} km
                               </div>
-                            </TableCell>
-                            <TableCell>
+                            </div>
+                            <div>
+                              <div className="text-muted-foreground">Next Maintenance</div>
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3 text-muted-foreground" />
-                                <span className="text-sm">{formatDate(trainset.nextMaintenance)}</span>
+                                {formatDate(trainset.nextMaintenance)}
                                 {maintenanceDays <= 7 && (
                                   <Badge variant="destructive" className="ml-1 text-xs">
                                     {maintenanceDays}d
                                   </Badge>
                                 )}
                               </div>
-                            </TableCell>
-                            <TableCell>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
                               {trainset.issues.length > 0 ? (
                                 <Badge variant="destructive" className="text-xs">
                                   {trainset.issues.length} issues
@@ -246,157 +228,411 @@ export default function TrainsetsPage() {
                                   No issues
                                 </Badge>
                               )}
-                            </TableCell>
-                            <TableCell>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-2xl">
-                                  <DialogHeader>
-                                    <DialogTitle>
-                                      {trainset.number} - {trainset.name}
-                                    </DialogTitle>
-                                    <DialogDescription>Detailed trainset information and status</DialogDescription>
-                                  </DialogHeader>
-                                  <div className="grid gap-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
-                                        <h4 className="font-semibold mb-2">Basic Information</h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Status:</span>
-                                            <StatusBadge status={trainset.status} />
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Location:</span>
-                                            <span>{trainset.location}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Stabling Position:</span>
-                                            <span>{trainset.stablingPosition}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Availability:</span>
-                                            <span>{trainset.availability}%</span>
-                                          </div>
+                            </div>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-2xl">
+                                <DialogHeader>
+                                  <DialogTitle>
+                                    {trainset.number} - {trainset.name}
+                                  </DialogTitle>
+                                  <DialogDescription>Detailed trainset information and status</DialogDescription>
+                                </DialogHeader>
+                                {/* Dialog content remains the same */}
+                                <div className="grid gap-6">
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                      <h4 className="font-semibold mb-2">Basic Information</h4>
+                                      <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between">
+                                          <span>Status:</span>
+                                          <StatusBadge status={trainset.status} />
                                         </div>
-                                      </div>
-                                      <div>
-                                        <h4 className="font-semibold mb-2">Maintenance</h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Last Service:</span>
-                                            <span>{formatDate(trainset.lastMaintenance)}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Next Service:</span>
-                                            <span>{formatDate(trainset.nextMaintenance)}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Fitness Expiry:</span>
-                                            <span>{formatDate(trainset.fitnessExpiry)}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Mileage:</span>
-                                            <span>{trainset.mileage.toLocaleString()} km</span>
-                                          </div>
+                                        <div className="flex justify-between">
+                                          <span>Location:</span>
+                                          <span>{trainset.location}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Stabling Position:</span>
+                                          <span>{trainset.stablingPosition}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Availability:</span>
+                                          <span>{trainset.availability}%</span>
                                         </div>
                                       </div>
                                     </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
-                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                          Job Cards
-                                          <InfoTooltip content={getTooltip("jobCards")} />
-                                        </h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Open:</span>
-                                            <Badge variant={trainset.jobCards.open > 0 ? "destructive" : "secondary"}>
-                                              {trainset.jobCards.open}
-                                            </Badge>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Pending:</span>
-                                            <Badge variant={trainset.jobCards.pending > 0 ? "secondary" : "outline"}>
-                                              {trainset.jobCards.pending}
-                                            </Badge>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Closed:</span>
-                                            <Badge variant="outline">{trainset.jobCards.closed}</Badge>
-                                          </div>
+                                    <div>
+                                      <h4 className="font-semibold mb-2">Maintenance</h4>
+                                      <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between">
+                                          <span>Last Service:</span>
+                                          <span>{formatDate(trainset.lastMaintenance)}</span>
                                         </div>
-                                      </div>
-                                      <div>
-                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                          Branding
-                                          <InfoTooltip content={getTooltip("brandingPriority")} />
-                                        </h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Type:</span>
-                                            <span>{trainset.branding.type}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Priority:</span>
-                                            <PriorityBadge priority={trainset.branding.priority} />
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Expires:</span>
-                                            <span>{formatDate(trainset.branding.expiryDate)}</span>
-                                          </div>
+                                        <div className="flex justify-between">
+                                          <span>Next Service:</span>
+                                          <span>{formatDate(trainset.nextMaintenance)}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Fitness Expiry:</span>
+                                          <span>{formatDate(trainset.fitnessExpiry)}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Mileage:</span>
+                                          <span>{trainset.mileage.toLocaleString()} km</span>
                                         </div>
                                       </div>
                                     </div>
+                                  </div>
 
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                       <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                        Cleaning Status
-                                        <InfoTooltip content={getTooltip("cleaningSchedule")} />
+                                        Job Cards
+                                        <InfoTooltip content={getTooltip("jobCards")} />
                                       </h4>
-                                      <div className="grid grid-cols-3 gap-4 text-sm">
+                                      <div className="space-y-2 text-sm">
                                         <div className="flex justify-between">
-                                          <span>Last Cleaned:</span>
-                                          <span>{formatDate(trainset.cleaningStatus.lastCleaned)}</span>
+                                          <span>Open:</span>
+                                          <Badge variant={trainset.jobCards.open > 0 ? "destructive" : "secondary"}>
+                                            {trainset.jobCards.open}
+                                          </Badge>
                                         </div>
                                         <div className="flex justify-between">
-                                          <span>Next Scheduled:</span>
-                                          <span>{formatDate(trainset.cleaningStatus.nextScheduled)}</span>
+                                          <span>Pending:</span>
+                                          <Badge variant={trainset.jobCards.pending > 0 ? "secondary" : "outline"}>
+                                            {trainset.jobCards.pending}
+                                          </Badge>
                                         </div>
                                         <div className="flex justify-between">
-                                          <span>Detail Level:</span>
-                                          <Badge variant="outline">{trainset.cleaningStatus.detailLevel}</Badge>
+                                          <span>Closed:</span>
+                                          <Badge variant="outline">{trainset.jobCards.closed}</Badge>
                                         </div>
                                       </div>
                                     </div>
-
-                                    {trainset.issues.length > 0 && (
-                                      <div>
-                                        <h4 className="font-semibold mb-2 text-red-600">Current Issues</h4>
-                                        <div className="space-y-1">
-                                          {trainset.issues.map((issue, index) => (
-                                            <div key={index} className="flex items-center gap-2 text-sm">
-                                              <AlertTriangle className="h-3 w-3 text-red-500" />
-                                              <span>{issue}</span>
-                                            </div>
-                                          ))}
+                                    <div>
+                                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                        Branding
+                                        <InfoTooltip content={getTooltip("brandingPriority")} />
+                                      </h4>
+                                      <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between">
+                                          <span>Type:</span>
+                                          <span>{trainset.branding.type}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Priority:</span>
+                                          <PriorityBadge priority={trainset.branding.priority} />
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span>Expires:</span>
+                                          <span>{formatDate(trainset.branding.expiryDate)}</span>
                                         </div>
                                       </div>
-                                    )}
+                                    </div>
                                   </div>
-                                </DialogContent>
-                              </Dialog>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
+
+                                  <div>
+                                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                      Cleaning Status
+                                      <InfoTooltip content={getTooltip("cleaningSchedule")} />
+                                    </h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                                      <div className="flex justify-between">
+                                        <span>Last Cleaned:</span>
+                                        <span>{formatDate(trainset.cleaningStatus.lastCleaned)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span>Next Scheduled:</span>
+                                        <span>{formatDate(trainset.cleaningStatus.nextScheduled)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span>Detail Level:</span>
+                                        <Badge variant="outline">{trainset.cleaningStatus.detailLevel}</Badge>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {trainset.issues.length > 0 && (
+                                    <div>
+                                      <h4 className="font-semibold mb-2 text-red-600">Current Issues</h4>
+                                      <div className="space-y-1">
+                                        {trainset.issues.map((issue, index) => (
+                                          <div key={index} className="flex items-center gap-2 text-sm">
+                                            <AlertTriangle className="h-3 w-3 text-red-500" />
+                                            <span>{issue}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          </div>
+                        </Card>
+                      )
+                    })}
+                  </div>
+
+                  {/* Desktop Table View */}
+                  <div className="hidden md:block overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>
+                            <div className="flex items-center gap-2">
+                              Trainset
+                              <InfoTooltip content={getTooltip("trainset")} />
+                            </div>
+                          </TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>
+                            <div className="flex items-center gap-2">
+                              Location
+                              <InfoTooltip content={getTooltip("stablingPosition")} />
+                            </div>
+                          </TableHead>
+                          <TableHead>
+                            <div className="flex items-center gap-2">
+                              Availability
+                              <InfoTooltip content={getTooltip("fleetAvailability")} />
+                            </div>
+                          </TableHead>
+                          <TableHead>
+                            <div className="flex items-center gap-2">
+                              Mileage
+                              <InfoTooltip content={getTooltip("mileageBalancing")} />
+                            </div>
+                          </TableHead>
+                          <TableHead>
+                            <div className="flex items-center gap-2">
+                              Next Maintenance
+                              <InfoTooltip content={getTooltip("preventiveMaintenance")} />
+                            </div>
+                          </TableHead>
+                          <TableHead>Issues</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredTrainsets.map((trainset) => {
+                          const maintenanceDays = getDaysUntil(trainset.nextMaintenance)
+                          const fitnessExpiry = getDaysUntil(trainset.fitnessExpiry)
+
+                          return (
+                            <TableRow key={trainset.id}>
+                              <TableCell>
+                                <div className="flex items-center gap-3">
+                                  {getStatusIcon(trainset.status)}
+                                  <div>
+                                    <div className="font-medium">{trainset.number}</div>
+                                    <div className="text-sm text-muted-foreground">{trainset.name}</div>
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <StatusBadge status={trainset.status} />
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm">{trainset.location}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  <Progress value={trainset.availability} className="w-16" />
+                                  <span className="text-sm font-medium">{trainset.availability}%</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <Gauge className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm">{trainset.mileage.toLocaleString()} km</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm">{formatDate(trainset.nextMaintenance)}</span>
+                                  {maintenanceDays <= 7 && (
+                                    <Badge variant="destructive" className="ml-1 text-xs">
+                                      {maintenanceDays}d
+                                    </Badge>
+                                  )}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                {trainset.issues.length > 0 ? (
+                                  <Badge variant="destructive" className="text-xs">
+                                    {trainset.issues.length} issues
+                                  </Badge>
+                                ) : fitnessExpiry <= 30 ? (
+                                  <Badge variant="secondary" className="text-xs bg-yellow-100 text-yellow-800">
+                                    Fitness due
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                                    No issues
+                                  </Badge>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-2xl">
+                                    <DialogHeader>
+                                      <DialogTitle>
+                                        {trainset.number} - {trainset.name}
+                                      </DialogTitle>
+                                      <DialogDescription>Detailed trainset information and status</DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-6">
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Basic Information</h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Status:</span>
+                                              <StatusBadge status={trainset.status} />
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Location:</span>
+                                              <span>{trainset.location}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Stabling Position:</span>
+                                              <span>{trainset.stablingPosition}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Availability:</span>
+                                              <span>{trainset.availability}%</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Maintenance</h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Last Service:</span>
+                                              <span>{formatDate(trainset.lastMaintenance)}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Next Service:</span>
+                                              <span>{formatDate(trainset.nextMaintenance)}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Fitness Expiry:</span>
+                                              <span>{formatDate(trainset.fitnessExpiry)}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Mileage:</span>
+                                              <span>{trainset.mileage.toLocaleString()} km</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                          <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                            Job Cards
+                                            <InfoTooltip content={getTooltip("jobCards")} />
+                                          </h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Open:</span>
+                                              <Badge variant={trainset.jobCards.open > 0 ? "destructive" : "secondary"}>
+                                                {trainset.jobCards.open}
+                                              </Badge>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Pending:</span>
+                                              <Badge variant={trainset.jobCards.pending > 0 ? "secondary" : "outline"}>
+                                                {trainset.jobCards.pending}
+                                              </Badge>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Closed:</span>
+                                              <Badge variant="outline">{trainset.jobCards.closed}</Badge>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                            Branding
+                                            <InfoTooltip content={getTooltip("brandingPriority")} />
+                                          </h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Type:</span>
+                                              <span>{trainset.branding.type}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Priority:</span>
+                                              <PriorityBadge priority={trainset.branding.priority} />
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Expires:</span>
+                                              <span>{formatDate(trainset.branding.expiryDate)}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div>
+                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                          Cleaning Status
+                                          <InfoTooltip content={getTooltip("cleaningSchedule")} />
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                                          <div className="flex justify-between">
+                                            <span>Last Cleaned:</span>
+                                            <span>{formatDate(trainset.cleaningStatus.lastCleaned)}</span>
+                                          </div>
+                                          <div className="flex justify-between">
+                                            <span>Next Scheduled:</span>
+                                            <span>{formatDate(trainset.cleaningStatus.nextScheduled)}</span>
+                                          </div>
+                                          <div className="flex justify-between">
+                                            <span>Detail Level:</span>
+                                            <Badge variant="outline">{trainset.cleaningStatus.detailLevel}</Badge>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {trainset.issues.length > 0 && (
+                                        <div>
+                                          <h4 className="font-semibold mb-2 text-red-600">Current Issues</h4>
+                                          <div className="space-y-1">
+                                            {trainset.issues.map((issue, index) => (
+                                              <div key={index} className="flex items-center gap-2 text-sm">
+                                                <AlertTriangle className="h-3 w-3 text-red-500" />
+                                                <span>{issue}</span>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             </div>

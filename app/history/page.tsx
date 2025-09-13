@@ -158,27 +158,25 @@ export default function HistoryPage() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
+            <div className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-                    Decision History & Logs
-                    <InfoTooltip content="Historical record of all induction decisions made by the system and their real-world outcomes. This data is used for continuous improvement and machine learning model training." />
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
+                    Induction History
+                    <InfoTooltip content={getTooltip("induction")} />
                   </h1>
-                  <p className="text-muted-foreground">
-                    Track and analyze past induction decisions and their operational outcomes
+                  <p className="text-muted-foreground text-sm sm:text-base flex items-center gap-2">
+                    Historical records of all fleet induction decisions and their outcomes
+                    <InfoTooltip content={getTooltip("algorithmicDecisionSupport")} />
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-sm">
-                    {filteredHistory.length} of {mockHistory.length} entries
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <Badge variant="outline" className="text-blue-600 w-fit">
+                    <Clock className="mr-1 h-3 w-3" />
+                    {mockHistory.length} Records
                   </Badge>
-                  <Button variant="outline" size="sm">
-                    <Download className="mr-2 h-4 w-4" />
-                    Export
-                  </Button>
                 </div>
               </div>
 
@@ -331,147 +329,210 @@ export default function HistoryPage() {
                   <CardDescription>Chronological record of induction decisions and outcomes</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Trainset</TableHead>
-                        <TableHead>Decision</TableHead>
-                        <TableHead>Outcome</TableHead>
-                        <TableHead>Supervisor</TableHead>
-                        <TableHead>Notes</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredHistory.map((entry) => {
-                        const trainset = getTrainsetById(entry.trainsetId)
+                  {/* Mobile Card View */}
+                  <div className="block md:hidden space-y-4">
+                    {filteredHistory.map((entry) => {
+                      const trainset = getTrainsetById(entry.trainsetId)
 
-                        return (
-                          <TableRow key={entry.id}>
-                            <TableCell>
-                              <div className="flex items-center gap-1">
-                                <CalendarIcon className="h-3 w-3 text-muted-foreground" />
-                                <span className="text-sm">{formatDate(entry.date)}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div>
-                                <div className="font-medium">{trainset?.number}</div>
-                                <div className="text-sm text-muted-foreground">{trainset?.name}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
+                      return (
+                        <Card key={entry.id} className="p-4">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
-                                {getDecisionIcon(entry.decision)}
-                                <StatusBadge status={entry.decision as any} />
+                                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm font-medium">{formatDate(entry.date)}</span>
                               </div>
-                            </TableCell>
-                            <TableCell>
                               <div className="flex items-center gap-2">
                                 {getOutcomeIcon(entry.outcome)}
                                 {getOutcomeBadge(entry.outcome)}
                               </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1">
-                                <User className="h-3 w-3 text-muted-foreground" />
+                            </div>
+
+                            <div className="space-y-2">
+                              <div>
+                                <span className="text-sm text-muted-foreground">Trainset: </span>
+                                <span className="font-medium">{trainset?.number} - {trainset?.name}</span>
+                              </div>
+
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-muted-foreground">Decision: </span>
+                                <div className="flex items-center gap-2">
+                                  {getDecisionIcon(entry.decision)}
+                                  <StatusBadge status={entry.decision as any} />
+                                </div>
+                              </div>
+
+                              <div>
+                                <span className="text-sm text-muted-foreground">Supervisor: </span>
                                 <span className="text-sm">{entry.supervisor}</span>
                               </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="max-w-xs truncate text-sm text-muted-foreground">{entry.notes}</div>
-                            </TableCell>
-                            <TableCell>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-2xl">
-                                  <DialogHeader>
-                                    <DialogTitle>Decision Details</DialogTitle>
-                                    <DialogDescription>
-                                      Complete information for decision made on {formatDateTime(entry.date)}
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <div className="space-y-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
-                                        <h4 className="font-semibold mb-2">Decision Information</h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Date & Time:</span>
-                                            <span>{formatDateTime(entry.date)}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Trainset:</span>
-                                            <span>
-                                              {trainset?.number} - {trainset?.name}
-                                            </span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Decision:</span>
-                                            <StatusBadge status={entry.decision as any} />
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Outcome:</span>
-                                            {getOutcomeBadge(entry.outcome)}
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Supervisor:</span>
-                                            <span>{entry.supervisor}</span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <h4 className="font-semibold mb-2">Trainset Status (at time)</h4>
-                                        <div className="space-y-2 text-sm">
-                                          <div className="flex justify-between">
-                                            <span>Location:</span>
-                                            <span>{trainset?.location}</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Availability:</span>
-                                            <span>{trainset?.availability}%</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Mileage:</span>
-                                            <span>{trainset?.mileage.toLocaleString()} km</span>
-                                          </div>
-                                          <div className="flex justify-between">
-                                            <span>Open Job Cards:</span>
-                                            <span>{trainset?.jobCards.open}</span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
 
-                                    <div>
-                                      <h4 className="font-semibold mb-2">Outcome Notes</h4>
-                                      <div className="p-3 rounded-lg bg-muted text-sm">{entry.notes}</div>
-                                    </div>
+                              {entry.notes && (
+                                <div>
+                                  <span className="text-sm text-muted-foreground">Notes: </span>
+                                  <span className="text-sm">{entry.notes}</span>
+                                </div>
+                              )}
+                            </div>
 
-                                    {entry.outcome !== "successful" && (
-                                      <div>
-                                        <h4 className="font-semibold mb-2 text-yellow-600">Lessons Learned</h4>
-                                        <div className="text-sm text-muted-foreground">
-                                          {entry.outcome === "partial"
-                                            ? "Consider additional buffer time for maintenance activities and verify all prerequisites before scheduling."
-                                            : "Review decision criteria and ensure all critical factors are properly weighted in future recommendations."}
+                            <div className="flex gap-2 pt-2">
+                              <Button variant="ghost" size="sm">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm">
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      )
+                    })}
+                  </div>
+
+                  {/* Desktop Table View */}
+                  <div className="hidden md:block">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Trainset</TableHead>
+                          <TableHead>Decision</TableHead>
+                          <TableHead>Outcome</TableHead>
+                          <TableHead>Supervisor</TableHead>
+                          <TableHead>Notes</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredHistory.map((entry) => {
+                          const trainset = getTrainsetById(entry.trainsetId)
+
+                          return (
+                            <TableRow key={entry.id}>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <CalendarIcon className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm">{formatDate(entry.date)}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">{trainset?.number}</div>
+                                  <div className="text-sm text-muted-foreground">{trainset?.name}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  {getDecisionIcon(entry.decision)}
+                                  <StatusBadge status={entry.decision as any} />
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  {getOutcomeIcon(entry.outcome)}
+                                  {getOutcomeBadge(entry.outcome)}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1">
+                                  <User className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm">{entry.supervisor}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="max-w-xs truncate text-sm text-muted-foreground">{entry.notes}</div>
+                              </TableCell>
+                              <TableCell>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-2xl">
+                                    <DialogHeader>
+                                      <DialogTitle>Decision Details</DialogTitle>
+                                      <DialogDescription>
+                                        Complete information for decision made on {formatDateTime(entry.date)}
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-6">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Decision Information</h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Date & Time:</span>
+                                              <span>{formatDateTime(entry.date)}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Trainset:</span>
+                                              <span>
+                                                {trainset?.number} - {trainset?.name}
+                                              </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Decision:</span>
+                                              <StatusBadge status={entry.decision as any} />
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Outcome:</span>
+                                              {getOutcomeBadge(entry.outcome)}
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Supervisor:</span>
+                                              <span>{entry.supervisor}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Trainset Status (at time)</h4>
+                                          <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                              <span>Location:</span>
+                                              <span>{trainset?.location}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Availability:</span>
+                                              <span>{trainset?.availability}%</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Mileage:</span>
+                                              <span>{trainset?.mileage.toLocaleString()} km</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                              <span>Open Job Cards:</span>
+                                              <span>{trainset?.jobCards.open}</span>
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
-                                    )}
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
+
+                                      <div>
+                                        <h4 className="font-semibold mb-2">Outcome Notes</h4>
+                                        <div className="p-3 rounded-lg bg-muted text-sm">{entry.notes}</div>
+                                      </div>
+
+                                      {entry.outcome !== "successful" && (
+                                        <div>
+                                          <h4 className="font-semibold mb-2 text-yellow-600">Lessons Learned</h4>
+                                          <div className="text-sm text-muted-foreground">
+                                            {entry.outcome === "partial"
+                                              ? "Consider additional buffer time for maintenance activities and verify all prerequisites before scheduling."
+                                              : "Review decision criteria and ensure all critical factors are properly weighted in future recommendations."}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             </div>

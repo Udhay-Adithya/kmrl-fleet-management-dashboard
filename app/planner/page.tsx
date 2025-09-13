@@ -80,26 +80,26 @@ export default function PlannerPage() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
+            <div className="p-3 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
                     Induction Decision Planner
                     <InfoTooltip content={getTooltip("induction")} />
                   </h1>
-                  <p className="text-muted-foreground flex items-center gap-2">
+                  <p className="text-muted-foreground text-sm sm:text-base flex items-center gap-2">
                     AI-powered recommendations for optimal trainset allocation and scheduling
                     <InfoTooltip content={getTooltip("aiOptimization")} />
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-green-600">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <Badge variant="outline" className="text-green-600 w-fit">
                     <Brain className="mr-1 h-3 w-3" />
                     AI Optimized
                   </Badge>
-                  <Button onClick={handleGeneratePlan} disabled={isGenerating}>
+                  <Button onClick={handleGeneratePlan} disabled={isGenerating} className="w-fit">
                     {isGenerating ? (
                       <>
                         <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
@@ -116,7 +116,7 @@ export default function PlannerPage() {
               </div>
 
               {/* Plan Summary */}
-              <div className="mt-6 grid gap-4 md:grid-cols-4">
+              <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -186,7 +186,7 @@ export default function PlannerPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-4 md:grid-cols-3">
+                  <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                     <div>
                       <div className="text-sm font-medium">Generated</div>
                       <div className="text-sm text-muted-foreground">
@@ -261,30 +261,32 @@ export default function PlannerPage() {
                       if (!trainset) return null
 
                       return (
-                        <div key={decision.trainsetId} className="rounded-lg border p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
+                        <div key={decision.trainsetId} className="rounded-lg border p-3 sm:p-4">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 sm:gap-4">
                               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
                                 {decision.priority}
                               </div>
-                              <div className="flex items-center gap-3">
-                                {getRecommendationIcon(decision.recommendation)}
-                                <div>
-                                  <div className="font-medium">
-                                    {trainset.number} - {trainset.name}
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                <div className="flex items-center gap-2">
+                                  {getRecommendationIcon(decision.recommendation)}
+                                  <div>
+                                    <div className="font-medium text-sm sm:text-base">
+                                      {trainset.number} - {trainset.name}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-muted-foreground">{trainset.location}</div>
                                   </div>
-                                  <div className="text-sm text-muted-foreground">{trainset.location}</div>
                                 </div>
+                                <StatusBadge status={decision.recommendation as any} />
                               </div>
-                              <StatusBadge status={decision.recommendation as any} />
                             </div>
-                            <div className="flex items-center gap-4">
-                              <div className="text-right">
+                            <div className="flex items-center gap-2 sm:gap-4">
+                              <div className="text-left sm:text-right">
                                 <div className={`text-sm font-medium ${getConfidenceColor(decision.confidence)} flex items-center gap-1`}>
                                   {decision.confidence}% confidence
                                   <InfoTooltip content={getTooltip("confidenceScore")} />
                                 </div>
-                                <Progress value={decision.confidence} className="w-20 mt-1" />
+                                <Progress value={decision.confidence} className="w-16 sm:w-20 mt-1" />
                               </div>
                               <Dialog>
                                 <DialogTrigger asChild>

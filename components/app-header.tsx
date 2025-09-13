@@ -3,6 +3,7 @@
 import { Bell, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,16 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
+        {/* Mobile Sidebar Trigger */}
+        <div className="mr-4 flex md:hidden">
+          <SidebarTrigger />
+        </div>
+
+        {/* Mobile App Title */}
+        <div className="mr-4 flex md:hidden">
+          <span className="font-bold text-sm">Fleet Platform</span>
+        </div>
+
         <div className="mr-4 hidden md:flex">
           <div className="mr-6 flex items-center space-x-2">
             <span className="hidden font-bold sm:inline-block">Fleet Induction Platform</span>
