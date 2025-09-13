@@ -1,7 +1,30 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "kmrl-fleet-management-dashboard",
+  "version": "1.0.0",
+  "description": "A modern, AI-powered fleet management system for Kochi Metro Rail Limited (KMRL)",
   "private": true,
+  "author": "Udhay Adithya",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Udhay-Adithya/kmrl-fleet-management-dashboard",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Udhay-Adithya/kmrl-fleet-management-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Udhay-Adithya/kmrl-fleet-management-dashboard/issues"
+  },
+  "keywords": [
+    "metro",
+    "fleet-management",
+    "railway",
+    "kochi",
+    "kmrl",
+    "dashboard",
+    "ai",
+    "nextjs",
+    "react",
+    "typescript"
+  ],
   "scripts": {
     "build": "next build",
     "dev": "next dev",
